@@ -2,7 +2,7 @@
     <img src="./images/coderco.jpg" alt="CoderCo" width="300"/>
 </div>
 
-# URL Shortener — Infamous CoderCo ECS Project's Son
+# URL Shortener - Infamous CoderCo ECS Project's Son
 
 The CoderCo ECS Project has given birth to this new challenge.
 
