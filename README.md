@@ -5,14 +5,36 @@
 
 # URL Shortener — CoderCo DevOps Project 🚀
 
-You’re shipping a production-ish service on AWS:
+In this project, you will build and deploy a production-ready URL shortener service on AWS — the type of project you could proudly put in your portfolio or even run in a real environment.
 
-- **ECS Fargate** service behind **ALB** (+ **WAF**)
-- **Blue/Green** deployments using **CodeDeploy** (canary or blue-green)
+The service takes a long URL and returns a shorter, unique code. Users can then access the short link and be redirected to the original URL. For example:
+
+The service takes a long URL and returns a shorter, unique code. Users can then access the short link and be redirected to the original URL. For example:
+
+```bash
+POST /shorten  { "url": "https://example.com/my/very/long/path" }
+→ { "short": "abc123ef", "url": "https://example.com/my/very/long/path" }
+
+GET /abc123ef
+→ HTTP 302 redirect to https://example.com/my/very/long/path
+```
+
+You’ll containerise the provided Python app, deploy it to AWS ECS Fargate behind an Application Load Balancer (ALB), and store the short-to-long URL mappings in Amazon DynamoDB.
+
+Your infrastructure will be Terraform-managed and you will be shipping a production-ish service on AWS:
+
+- **ECS Fargate** service behind **ALB** (+ **WAF**) - you could try this in Lambda but think about it carefully (if it makes sense or not)
+
+- Runs inside private subnets (no public IPs)
+- Accesses AWS services via VPC Endpoints (no NAT gateways)
+
+- Has blue/green or canary deployments via AWS CodeDeploy for zero-downtime releases
+
+- Is protected by AWS WAF rules on the ALB
+
 - **DynamoDB** for storage (PAY_PER_REQUEST, PITR on)
-- **ECR** for container images
-- **VPC** with **private subnets** + **VPC Endpoints** (no NAT gateways)
-- **GitHub Actions** with **OIDC** (no static AWS keys)
+
+- Uses GitHub Actions OIDC for CI/CD — no long-lived AWS keys or static creds please!
 
 The Python app is provided. You must do **all infrastructure + CI/CD**.
 
@@ -23,13 +45,13 @@ The Python app is provided. You must do **all infrastructure + CI/CD**.
 - Must implement **blue/green** with **automatic rollback on failed health checks**.
 - **WAF** with the appropriate rules attached to ALB.
 - Use **Terraform** (split modules + envs). State in **S3** with **DDB lock**.
-- Cost-conscious. No unnecessary resources pls. 
+- Cost-conscious. No unnecessary resources pls.
 
 ## Deliverables
 
 1. Working service URL (ALB DNS or Route53) with:
    - `GET /healthz` ➜ `{"status":"ok"}`
-   - `POST /shorten {"url":"https://example.com"}` ➜ returns `short`
+   - `POST /shorten {"url":"https://coderco.io/shorten"}` ➜ returns `short`
    - `GET /{short}` ➜ HTTP 302 to original URL
 2. GitHub Actions:
    - **CI**: build, unit tests, image scan (tool of your choice), push to ECR on `main`.
