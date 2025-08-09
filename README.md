@@ -6,17 +6,17 @@
 
 The CoderCo ECS Project has given birth to this new challenge.
 
-For a long time, our community cut their teeth on the infamous CoderCo ECS project — a well-known rite of passage that sharpened skills in containerisation, Terraform and AWS deployment. It became a badge of honour for anyone completing our DevOps Roadmap.
+For a long time, our community cut their teeth on the infamous CoderCo ECS project - a well-known rite of passage that sharpened skills in containerisation, Terraform and AWS deployment. It became a badge of honour for anyone completing our DevOps Roadmap.
 
 Now, we’re raising the bar. This new and improved ECS project keeps the solid foundations of its predecessor but adds more production-ready features, security hardening and cost-efficient design patterns you’ll see in the real world.
 
-You’re not just deploying an app here — you’re engineering an end-to-end, modern AWS workload with blue/green deployments, VPC-only connectivity, WAF protection and a CI/CD pipeline powered by GitHub OIDC.
+You’re not just deploying an app here - you’re engineering an end-to-end, modern AWS workload with blue/green deployments, VPC-only connectivity, WAF protection and a CI/CD pipeline powered by GitHub OIDC.
 
 It’s the next journey of our CoderCo tradition.
 
 ## Project Overview
 
-In this project, you will build and deploy a production-ready URL shortener service on AWS — the type of project you could proudly put in your portfolio or even run in a real environment.
+In this project, you will build and deploy a production-ready URL shortener service on AWS - the type of project you could proudly put in your portfolio or even run in a real environment.
 
 The service takes a long URL and returns a shorter, unique code. Users can then access the short link and be redirected to the original URL. For example:
 
