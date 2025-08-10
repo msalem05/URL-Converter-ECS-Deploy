@@ -63,15 +63,19 @@ This project deploys real AWS infrastructure that will incur costs if left runni
 
 As soon as you complete your deployment and take your screenshots/demos, tear down your resources:
 
+For example:
+
 ```bash
 cd infra/envs/dev && terraform destroy -auto-approve
 ```
 
-Keep DynamoDB, ALB and WAF especially in mind - these run 24/7.
+**Note:** Even if you’re not sending any traffic, the following services will continue to incur charges until you delete them:
 
-If you want to re-deploy later, your state is in the remote backend and can be re-applied.
+- Application Load Balancer (ALB) - hourly cost + per-GB processed
+- AWS WAF - hourly cost + per-rule + per-request processed
+- DynamoDB - PAY_PER_REQUEST means you’re charged for reads/writes, but storage still cost money even with no traffic. 
 
-💡 Tip: You can also test most of this locally using LocalStack for ECS, ECR, DynamoDB, S3 and CodeDeploy before going live on AWS. This can dramatically reduce costs during development. [LocalStack docs](https://docs.localstack.cloud/aws/getting-started/)
+💡 Tip for saving money during development: You can test most of this locally using LocalStack for ECS, ECR, DynamoDB, S3, and CodeDeploy before deploying to real AWS. This can dramatically cut costs while you build. [LocalStack docs](https://docs.localstack.cloud/aws/getting-started/)
 
 ## Deliverables
 
@@ -93,9 +97,14 @@ If you want to re-deploy later, your state is in the remote backend and can be r
 
 - Infra goes in `infra/` using provided folder layout.
 - You must create `infra/global/backend` for Terraform state (S3+DDB) and run it once.
-- Use two **target groups** (blue/green). Health check path: `/healthz`.
+- Use two **target groups** (blue/green). Health check path: `/healthz` or whatever health check path you set.
 - App container port: **8080**. No public IPs.
 - App needs env var: `TABLE_NAME`.
+- You may use LocalStack to emulate AWS services locally for testing your Terraform and CI/CD flows before deploying to real AWS. This is especially useful for validating:
+  - VPC & endpoint configs
+  - DynamoDB CRUD via the app
+  - ECR pushes
+  - ECS task/service definitions
 
 ## Acceptance Criteria (we will check)
 
@@ -104,6 +113,7 @@ If you want to re-deploy later, your state is in the remote backend and can be r
 - App IAM role limited to `dynamodb:GetItem/PutItem` on your table only.
 - Execution role able to pull from ECR and write CloudWatch logs.
 - GitHub workflow uses `id-token: write` and assumes your deploy role.
+- Too much use of AI and not understanding the code, will lead to resubmission.
 
 ## Bonus (optional)
 
