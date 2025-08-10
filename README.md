@@ -56,6 +56,23 @@ The Python app is provided. You must do **all infrastructure + CI/CD**.
 - Use **Terraform** (split modules + envs). State in **S3** with **DDB lock**.
 - Cost-conscious. No unnecessary resources pls.
 
+
+## ⚠️ IMPORTANT: Costs & Teardown
+
+This project deploys real AWS infrastructure that will incur costs if left running.
+
+As soon as you complete your deployment and take your screenshots/demos, tear down your resources:
+
+```bash
+cd infra/envs/dev && terraform destroy -auto-approve
+```
+
+Keep DynamoDB, ALB and WAF especially in mind - these run 24/7.
+
+If you want to re-deploy later, your state is in the remote backend and can be re-applied.
+
+💡 Tip: You can also test most of this locally using LocalStack for ECS, ECR, DynamoDB, S3 and CodeDeploy before going live on AWS. This can dramatically reduce costs during development. [LocalStack docs](https://docs.localstack.cloud/aws/getting-started/)
+
 ## Deliverables
 
 1. Working service URL (ALB DNS or Route53) with:
@@ -94,5 +111,37 @@ The Python app is provided. You must do **all infrastructure + CI/CD**.
 - Infracost/tfsec/Trivy in CI
 - Route53 DNS + friendly hostname
 - CloudWatch dashboard (p50/p95 latency, 5xx, healthy host count)
+
+## Extra special (if you want to have a variation to your project)
+
+1. App logic changes (you provide the base, they extend it)
+
+  - Add an analytics endpoint /stats/{short} to count and return redirect hits (DDB update).
+
+  - Add an expiry TTL for shortened links (DDB TTL attribute).
+
+  - Add a /bulk-shorten endpoint to shorten multiple URLs in one request.
+
+  - Store metadata (created_at, creator_ip) alongside the link.
+
+2. AWS integrations (you can pick 2-3 extras or all, whatever is required.)
+
+  - Push click events to SQS or Kinesis for later processing.
+
+  - Store request logs in S3 via Firehose.
+
+  - Use Parameter Store or Secrets Manager for TABLE_NAME instead of env var.
+
+  - Add CloudFront in front of the ALB (bonus for caching).
+
+3. Security patterns
+
+  - Require an API key via API Gateway in front of the ALB.
+
+  - Add IP rate limiting via WAF rules.
+
+4. Monitoring patterns
+
+  - Add CloudWatch dashboard (p50/p95 latency, 5xx, healthy host count)
 
 Everything else is on you. Read the AWS docs pls, iterate and commit small. Good luck!
