@@ -112,7 +112,7 @@ If you want to re-deploy later, your state is in the remote backend and can be r
 - Route53 DNS + friendly hostname
 - CloudWatch dashboard (p50/p95 latency, 5xx, healthy host count)
 
-## Extra special (if you want to have a variation to your project)
+## Extra special & outside project scope (if you want to have a variation to your project)
 
 1. App logic changes (you provide the base, they extend it)
 
